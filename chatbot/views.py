@@ -624,7 +624,9 @@ def chat_api(request):
         if not api_key:
             return JsonResponse({"error": "OPENROUTER_API_KEY missing"}, status=500)
 
-        user_message = request.POST.get("message", "")
+        data = json.loads(request.body)
+        user_message = data.get("message")
+        emotion = data.get("emotion")
 
         response = requests.post(
             "https://openrouter.ai/api/v1/chat/completions",
