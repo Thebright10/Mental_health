@@ -157,8 +157,7 @@ emotion_labels = [
 ]
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "model/emotion_model.pkl")
-model = joblib.load(MODEL_PATH)
-
+model = None
 
 @csrf_exempt
 def detect_emotion(request):
