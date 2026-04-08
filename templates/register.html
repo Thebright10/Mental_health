@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:50px 16px;">
+
+  <div style="width:100%;max-width:600px;" data-aos="fade-up">
+
+    <!-- Progress steps -->
+    <div style="display:flex;justify-content:center;gap:8px;margin-bottom:30px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#5ba4cf,#9b59b6);
+          display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;">1</div>
+        <span style="font-size:13px;font-weight:600;color:#5ba4cf;">Account</span>
+      </div>
+      <div style="width:40px;height:2px;background:rgba(91,164,207,0.3);align-self:center;border-radius:2px;"></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(91,164,207,0.15);
+          display:flex;align-items:center;justify-content:center;color:#a0aec0;font-weight:700;font-size:13px;">2</div>
+        <span style="font-size:13px;font-weight:600;color:#a0aec0;">Personal</span>
+      </div>
+      <div style="width:40px;height:2px;background:rgba(91,164,207,0.15);align-self:center;border-radius:2px;"></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(91,164,207,0.15);
+          display:flex;align-items:center;justify-content:center;color:#a0aec0;font-weight:700;font-size:13px;">3</div>
+        <span style="font-size:13px;font-weight:600;color:#a0aec0;">Family</span>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div style="background:rgba(255,255,255,0.88);backdrop-filter:blur(20px);
+      border-radius:28px;padding:50px 44px;
+      border:1px solid rgba(255,255,255,0.95);
+      box-shadow:0 20px 60px rgba(155,89,182,0.15),0 4px 20px rgba(0,0,0,0.06);">
+
+      <!-- Heading -->
+      <div style="text-align:center;margin-bottom:36px;">
+        <div style="width:72px;height:72px;border-radius:50%;
+          background:linear-gradient(135deg,#9b59b6,#48c9b0);
+          display:flex;align-items:center;justify-content:center;
+          font-size:30px;margin:0 auto 18px;
+          box-shadow:0 8px 25px rgba(155,89,182,0.4);">🌱</div>
+        <h2 style="font-weight:800;font-size:28px;color:#2d3748;margin-bottom:6px;">Begin Your Journey</h2>
+        <p style="color:#a0aec0;font-size:15px;">Create your free account — healing starts here</p>
+      </div>
+
+      <!-- Error alert -->
+      {% if error %}
+      <div style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);
+        border-radius:12px;padding:14px 18px;margin-bottom:22px;
+        color:#c0392b;font-size:14px;font-weight:600;">
+        ⚠️ {{ error }}
+      </div>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <!-- Section: Account -->
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#5ba4cf,#9b59b6);
+              display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;">1</div>
+            <span style="font-weight:700;color:#2d3748;font-size:15px;">Account Details</span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+            <div>
+              <label style="font-size:12px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;">Username</label>
+              <div style="position:relative;">
+                <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;">👤</span>
+                <input type="text" name="username" required
+                  style="width:100%;padding:13px 14px 13px 40px;border-radius:14px;font-size:14px;
+                    border:1.5px solid rgba(155,89,182,0.25);background:rgba(248,244,255,0.7);
+                    color:#2d3748;outline:none;transition:all 0.3s;font-family:'Nunito',sans-serif;"
+                  placeholder="Username"
+                  onfocus="this.style.borderColor='#9b59b6';this.style.background='white';this.style.boxShadow='0 0 0 3px rgba(155,89,182,0.12)'"
+                  onblur="this.style.borderColor='rgba(155,89,182,0.25)';this.style.background='rgba(248,244,255,0.7)';this.style.boxShadow='none'">
+              </div>
+            </div>
+            <div>
+              <label style="font-size:12px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;">Email</label>
+              <div style="position:relative;">
+                <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;">📧</span>
+                <input type="email" name="email" required
+                  style="width:100%;padding:13px 14px 13px 40px;border-radius:14px;font-size:14px;
+                    border:1.5px solid rgba(155,89,182,0.25);background:rgba(248,244,255,0.7);
+                    color:#2d3748;outline:none;transition:all 0.3s;font-family:'Nunito',sans-serif;"
+                  placeholder="your@email.com"
+                  onfocus="this.style.borderColor='#9b59b6';this.style.background='white';this.style.boxShadow='0 0 0 3px rgba(155,89,182,0.12)'"
+                  onblur="this.style.borderColor='rgba(155,89,182,0.25)';this.style.background='rgba(248,244,255,0.7)';this.style.boxShadow='none'">
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <label style="font-size:12px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;">Password</label>
+            <div style="position:relative;">
+              <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;">🔒</span>
+              <input type="password" name="password" required
+                style="width:100%;padding:13px 14px 13px 40px;border-radius:14px;font-size:14px;
+                  border:1.5px solid rgba(155,89,182,0.25);background:rgba(248,244,255,0.7);
+                  color:#2d3748;outline:none;transition:all 0.3s;font-family:'Nunito',sans-serif;"
+                placeholder="Create a strong password"
+                onfocus="this.style.borderColor='#9b59b6';this.style.background='white';this.style.boxShadow='0 0 0 3px rgba(155,89,182,0.12)'"
+                onblur="this.style.borderColor='rgba(155,89,182,0.25)';this.style.background='rgba(248,244,255,0.7)';this.style.boxShadow='none'">
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(155,89,182,0.2),transparent);margin:24px 0;"></div>
+
+        <!-- Section: Personal -->
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#48c9b0,#5ba4cf);
+              display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;">2</div>
+            <span style="font-weight:700;color:#2d3748;font-size:15px;">Personal Info <span style="color:#a0aec0;font-weight:400;font-size:13px;">(optional)</span></span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+              <label style="font-size:12px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;">Age</label>
+              <div style="position:relative;">
+                <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;">🎂</span>
+                <input type="number" name="age"
+                  style="width:100%;padding:13px 14px 13px 40px;border-radius:14px;font-size:14px;
+                    border:1.5px solid rgba(72,201,176,0.25);background:rgba(240,253,250,0.7);
+                    color:#2d3748;outline:none;transition:all 0.3s;font-family:'Nunito',sans-serif;"
+                  placeholder="Your age"
+                  onfocus="this.style.borderColor='#48c9b0';this.style.background='white';this.style.boxShadow='0 0 0 3px rgba(72,201,176,0.12)'"
+                  onblur="this.style.borderColor='rgba(72,201,176,0.25)';this.style.background='rgba(240,253,250,0.7)';this.style.boxShadow='none'">
+              </div>
+            </div>
+            <div>
+              <label style="font-size:12px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;">Gender</label>
+              <div style="position:relative;">
+                <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;">🌈</span>
+                <input type="text" name="gender"
+                  style="width:100%;padding:13px 14px 13px 40px;border-radius:14px;font-size:14px;
+                    border:1.5px solid rgba(72,201,176,0.25);background:rgba(240,253,250,0.7);
+                    color:#2d3748;outline:none;transition:all 0.3s;font-family:'Nunito',sans-serif;"
+                  placeholder="Your gender"
+                  onfocus="this.style.borderColor='#48c9b0';this.style.background='white';this.style.boxShadow='0 0 0 3px rgba(72,201,176,0.12)'"
+                  onblur="this.style.borderColor='rgba(72,201,176,0.25)';this.style.background='rgba(240,253,250,0.7)';this.style.boxShadow='none'">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(72,201,176,0.2),transparent);margin:24px 0;"></div>
+
+        <!-- Section: Family -->
+        <div style="margin-bottom:30px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#f39c12,#e74c3c);
+              display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;">3</div>
+            <span style="font-weight:700;color:#2d3748;font-size:15px;">Emergency Contact</span>
+          </div>
+          <p style="font-size:13px;color:#a0aec0;margin-bottom:18px;padding-left:38px;">
+            🛡️ For safety: we'll notify your family if our system detects signs of crisis.
+          </p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+              <label style="font-size:12px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;">Family Email</label>
+              <div style="position:relative;">
+                <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;">💌</span>
+                <input type="email" name="family_email" required
+                  style="width:100%;padding:13px 14px 13px 40px;border-radius:14px;font-size:14px;
+                    border:1.5px solid rgba(243,156,18,0.25);background:rgba(255,251,240,0.7);
+                    color:#2d3748;outline:none;transition:all 0.3s;font-family:'Nunito',sans-serif;"
+                  placeholder="family@email.com"
+                  onfocus="this.style.borderColor='#f39c12';this.style.background='white';this.style.boxShadow='0 0 0 3px rgba(243,156,18,0.12)'"
+                  onblur="this.style.borderColor='rgba(243,156,18,0.25)';this.style.background='rgba(255,251,240,0.7)';this.style.boxShadow='none'">
+              </div>
+            </div>
+            <div>
+              <label style="font-size:12px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;">Family Phone</label>
+              <div style="position:relative;">
+                <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;">📞</span>
+                <input type="text" name="family_phone" required
+                  style="width:100%;padding:13px 14px 13px 40px;border-radius:14px;font-size:14px;
+                    border:1.5px solid rgba(243,156,18,0.25);background:rgba(255,251,240,0.7);
+                    color:#2d3748;outline:none;transition:all 0.3s;font-family:'Nunito',sans-serif;"
+                  placeholder="+91 XXXXX XXXXX"
+                  onfocus="this.style.borderColor='#f39c12';this.style.background='white';this.style.boxShadow='0 0 0 3px rgba(243,156,18,0.12)'"
+                  onblur="this.style.borderColor='rgba(243,156,18,0.25)';this.style.background='rgba(255,251,240,0.7)';this.style.boxShadow='none'">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit"
+          style="width:100%;padding:17px;border:none;border-radius:50px;
+            background:linear-gradient(135deg,#9b59b6,#5ba4cf,#48c9b0);
+            background-size:200% 200%;color:white;font-weight:700;font-size:16px;
+            cursor:pointer;transition:all 0.3s;
+            box-shadow:0 8px 30px rgba(155,89,182,0.4);font-family:'Nunito',sans-serif;
+            animation:gradshift 4s ease infinite;"
+          onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 40px rgba(155,89,182,0.5)'"
+          onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 30px rgba(155,89,182,0.4)'">
+          🌱 Create My Account
+        </button>
+
+        <style>
+        @keyframes gradshift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+        </style>
+
+      </form>
+
+      <!-- Login link -->
+      <p style="text-align:center;margin-top:24px;font-size:14px;color:#a0aec0;">
+        Already have an account?
+        <a href="{% url 'login' %}" style="color:#9b59b6;font-weight:700;text-decoration:none;">Sign in →</a>
+      </p>
+
+      <p style="text-align:center;margin-top:16px;font-size:12px;color:#cbd5e0;font-style:italic;">
+        🔐 Your data is private &amp; encrypted. We care about your safety.
+      </p>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .crisis-page { min-height: 100vh; padding-top: 72px; position: relative; overflow: hidden; font-family: 'Poppins', sans-serif; }
+
+  /* URGENT BG - deep red tones */
+  .crisis-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .crisis-bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.07; filter: blur(3px) saturate(0.8); }
+  .crisis-bg-overlay { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(239,68,68,0.12) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 0% 100%, rgba(14,165,233,0.08) 0%, transparent 60%), linear-gradient(180deg, rgba(5,13,26,0.8) 0%, rgba(5,13,26,0.6) 100%); }
+  .crisis-orb { position: absolute; border-radius: 50%; filter: blur(120px); pointer-events: none; animation: orbFloat 16s ease-in-out infinite; }
+  .crisis-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(239,68,68,0.1), transparent); top: -200px; left: -100px; }
+  .crisis-orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(14,165,233,0.08), transparent); bottom: 100px; right: -80px; animation-delay: -8s; }
+  @keyframes orbFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-20px)} }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.4)} }
+  @keyframes urgentPulse { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4)} 50%{box-shadow:0 0 0 20px rgba(239,68,68,0)} }
+
+  .crisis-content { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 60px 40px 120px; }
+
+  /* EMERGENCY BANNER */
+  .crisis-emergency-banner {
+    background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.08));
+    border: 2px solid rgba(239,68,68,0.4);
+    border-radius: 20px;
+    padding: 28px 36px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 48px;
+    animation: urgentPulse 3s infinite;
+  }
+  .crisis-emergency-icon { font-size: 36px; flex-shrink: 0; }
+  .crisis-emergency-text h3 { font-size: 18px; font-weight: 800; color: #fca5a5; margin-bottom: 6px; }
+  .crisis-emergency-text p { font-size: 14.5px; color: rgba(240,249,255,0.7); margin: 0; }
+  .crisis-emergency-btn { margin-left: auto; flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 50px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 800; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 8px 28px rgba(239,68,68,0.4); transition: all 0.3s ease; white-space: nowrap; }
+  .crisis-emergency-btn:hover { transform: scale(1.05); box-shadow: 0 12px 40px rgba(239,68,68,0.6); color: white; }
+
+  /* HERO */
+  .crisis-hero { text-align: center; margin-bottom: 64px; }
+  .crisis-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 7px 18px; border-radius: 50px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #fca5a5; margin-bottom: 24px; backdrop-filter: blur(8px); }
+  .crisis-eyebrow::before { content:''; width:6px; height:6px; border-radius:50%; background:#ef4444; animation: pulse 1.5s infinite; }
+  .crisis-title { font-size: clamp(40px, 6vw, 72px); font-weight: 900; letter-spacing: -2px; margin-bottom: 16px; background: linear-gradient(135deg, #f0f9ff 0%, #fca5a5 50%, #38bdf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .crisis-subtitle { font-size: 18px; color: rgba(240,249,255,0.6); max-width: 560px; margin: 0 auto; line-height: 1.8; }
+
+  /* HOTLINE CARDS */
+  .crisis-hotlines { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 56px; }
+  .hotline-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px; padding: 28px 32px;
+    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    position: relative; overflow: hidden;
+    backdrop-filter: blur(12px);
+  }
+  .hotline-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+  .hotline-card.red::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+  .hotline-card.blue::before { background: linear-gradient(90deg, #0ea5e9, #38bdf8); }
+  .hotline-card.green::before { background: linear-gradient(90deg, #34d399, #6ee7b7); }
+  .hotline-card.purple::before { background: linear-gradient(90deg, #818cf8, #a5b4fc); }
+  .hotline-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.15); box-shadow: 0 24px 60px rgba(0,0,0,0.4); }
+  .hotline-flag { font-size: 28px; margin-bottom: 12px; display: block; }
+  .hotline-name { font-size: 18px; font-weight: 800; color: #f0f9ff; margin-bottom: 4px; }
+  .hotline-number { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; margin: 10px 0; }
+  .hotline-card.red .hotline-number { color: #fca5a5; }
+  .hotline-card.blue .hotline-number { color: #7dd3fc; }
+  .hotline-card.green .hotline-number { color: #6ee7b7; }
+  .hotline-card.purple .hotline-number { color: #c7d2fe; }
+  .hotline-desc { font-size: 13px; color: rgba(240,249,255,0.5); line-height: 1.6; margin-bottom: 16px; }
+  .hotline-availability { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(240,249,255,0.4); }
+  .hotline-availability::before { content:''; width:6px; height:6px; border-radius:50%; background: #34d399; animation: pulse 2s infinite; }
+  .btn-call { display: block; text-align: center; margin-top: 16px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #f0f9ff; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.25s ease; }
+  .btn-call:hover { background: rgba(255,255,255,0.1); color: #f0f9ff; transform: none; }
+
+  /* SELF HELP */
+  .crisis-selfhelp { margin: 56px 0; }
+  .selfhelp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+  .selfhelp-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; transition: all 0.3s ease; }
+  .selfhelp-card:hover { background: rgba(255,255,255,0.05); transform: translateY(-4px); }
+  .selfhelp-icon { font-size: 26px; margin-bottom: 12px; display: block; }
+  .selfhelp-name { font-size: 15px; font-weight: 700; color: #f0f9ff; margin-bottom: 8px; }
+  .selfhelp-desc { font-size: 13px; color: rgba(240,249,255,0.5); line-height: 1.7; }
+
+  /* SECTIONS */
+  .crisis-section { margin-bottom: 52px; }
+  .crisis-divider { width: 60px; height: 3px; background: linear-gradient(90deg, #ef4444, #38bdf8); border-radius: 3px; margin-bottom: 20px; }
+  .crisis-section h2 { font-size: 24px; font-weight: 800; color: #f0f9ff; margin-bottom: 16px; }
+  .crisis-section p { font-size: 15px; color: rgba(240,249,255,0.6); line-height: 1.85; margin-bottom: 14px; }
+  .crisis-section ul { padding-left: 0; list-style: none; }
+  .crisis-section ul li { font-size: 15px; color: rgba(240,249,255,0.6); line-height: 1.8; margin-bottom: 10px; padding-left: 24px; position: relative; }
+  .crisis-section ul li::before { content: '→'; position: absolute; left: 0; color: #fca5a5; font-weight: 700; }
+
+  @media (max-width: 768px) { .crisis-hotlines { grid-template-columns: 1fr; } .selfhelp-grid { grid-template-columns: 1fr; } .crisis-emergency-banner { flex-direction: column; text-align: center; } .crisis-emergency-btn { margin-left: 0; } .crisis-content { padding: 40px 20px 80px; } }
+</style>
+
+<div class="crisis-page">
+  <div class="crisis-bg">
+    <img class="crisis-bg-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="">
+    <div class="crisis-bg-overlay"></div>
+  </div>
+  <div class="crisis-orb crisis-orb-1"></div>
+  <div class="crisis-orb crisis-orb-2"></div>
+
+  <div class="crisis-content">
+
+    <!-- Emergency Banner -->
+    <div class="crisis-emergency-banner" data-aos="fade-down">
+      <div class="crisis-emergency-icon">🚨</div>
+      <div class="crisis-emergency-text">
+        <h3>Are you in immediate danger?</h3>
+        <p>If you or someone else is at risk of harm right now, please call emergency services immediately.</p>
+      </div>
+      <a href="tel:112" class="crisis-emergency-btn">📞 Call 112 Now</a>
+    </div>
+
+    <!-- Hero -->
+    <div class="crisis-hero" data-aos="fade-up">
+      <div class="crisis-eyebrow">You Are Not Alone</div>
+      <h1 class="crisis-title">Crisis Help</h1>
+      <p class="crisis-subtitle">Reaching out takes courage. Here are trusted resources staffed by compassionate professionals available right now.</p>
+    </div>
+
+    <!-- Hotlines -->
+    <div class="crisis-hotlines">
+      <div class="hotline-card red" data-aos="fade-up" data-aos-delay="0">
+        <span class="hotline-flag">🇮🇳</span>
+        <div class="hotline-name">iCall — TISS</div>
+        <div class="hotline-number">9152987821</div>
+        <p class="hotline-desc">India's leading mental health helpline offering confidential counselling for emotional distress, anxiety, depression, and suicidal thoughts.</p>
+        <div class="hotline-availability">Mon–Sat · 8am–10pm</div>
+        <a href="tel:9152987821" class="btn-call">📞 Call iCall</a>
+      </div>
+      <div class="hotline-card blue" data-aos="fade-up" data-aos-delay="100">
+        <span class="hotline-flag">🇮🇳</span>
+        <div class="hotline-name">Vandrevala Foundation</div>
+        <div class="hotline-number">1860-2662-345</div>
+        <p class="hotline-desc">24/7 mental health helpline providing support for crisis situations, depression, trauma, and psychiatric emergencies across India.</p>
+        <div class="hotline-availability">24 Hours · 7 Days</div>
+        <a href="tel:18602662345" class="btn-call">📞 Call Vandrevala</a>
+      </div>
+      <div class="hotline-card green" data-aos="fade-up" data-aos-delay="200">
+        <span class="hotline-flag">🇮🇳</span>
+        <div class="hotline-name">NIMHANS Helpline</div>
+        <div class="hotline-number">080-46110007</div>
+        <p class="hotline-desc">National Institute of Mental Health and Neuro Sciences — India's premier psychiatric institution providing crisis support and referrals.</p>
+        <div class="hotline-availability">24 Hours · 7 Days</div>
+        <a href="tel:08046110007" class="btn-call">📞 Call NIMHANS</a>
+      </div>
+      <div class="hotline-card purple" data-aos="fade-up" data-aos-delay="300">
+        <span class="hotline-flag">🌍</span>
+        <div class="hotline-name">Crisis Text Line</div>
+        <div class="hotline-number">Text "HELLO"</div>
+        <p class="hotline-desc">Text-based crisis support. Send HELLO to 741741. Trained crisis counselors respond 24/7. Available in multiple languages.</p>
+        <div class="hotline-availability">Text 741741 · 24/7</div>
+        <a href="sms:741741?body=HELLO" class="btn-call">💬 Send Text</a>
+      </div>
+    </div>
+
+    <!-- Self Help -->
+    <div class="crisis-selfhelp" data-aos="fade-up">
+      <div class="crisis-divider"></div>
+      <h2 style="font-size:24px;font-weight:800;color:#f0f9ff;margin-bottom:8px;">Immediate Coping Techniques</h2>
+      <p style="font-size:15px;color:rgba(240,249,255,0.6);line-height:1.8;">While reaching out for help, these evidence-based techniques can help you feel safer right now:</p>
+      <div class="selfhelp-grid">
+        <div class="selfhelp-card">
+          <span class="selfhelp-icon">🌬️</span>
+          <div class="selfhelp-name">Box Breathing</div>
+          <p class="selfhelp-desc">Inhale for 4 counts, hold for 4, exhale for 4, hold for 4. Repeat 4 times. Activates your parasympathetic nervous system instantly.</p>
+        </div>
+        <div class="selfhelp-card">
+          <span class="selfhelp-icon">✋</span>
+          <div class="selfhelp-name">5-4-3-2-1 Grounding</div>
+          <p class="selfhelp-desc">Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste. Anchors you to the present moment.</p>
+        </div>
+        <div class="selfhelp-card">
+          <span class="selfhelp-icon">🧊</span>
+          <div class="selfhelp-name">Temperature Shift</div>
+          <p class="selfhelp-desc">Hold cold water in your hands or splash your face. The temperature shift triggers the dive reflex and slows your heart rate rapidly.</p>
+        </div>
+        <div class="selfhelp-card">
+          <span class="selfhelp-icon">🏃</span>
+          <div class="selfhelp-name">Physical Movement</div>
+          <p class="selfhelp-desc">A short walk, jumping jacks, or stretching releases tension stored in the body and shifts nervous system state.</p>
+        </div>
+        <div class="selfhelp-card">
+          <span class="selfhelp-icon">📝</span>
+          <div class="selfhelp-name">Safety Planning</div>
+          <p class="selfhelp-desc">Write down 3 people you can call, 3 places you can go, and 3 reasons to stay safe. Keep this list accessible.</p>
+        </div>
+        <div class="selfhelp-card">
+          <span class="selfhelp-icon">💬</span>
+          <div class="selfhelp-name">Talk to MindFlow AI</div>
+          <p class="selfhelp-desc">Our AI companion is available 24/7. While not a replacement for human support, talking can help you feel less alone in the moment.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="crisis-section" data-aos="fade-up">
+      <div class="crisis-divider"></div>
+      <h2>Warning Signs to Watch For</h2>
+      <p>In yourself or others, these signs indicate immediate professional help is needed:</p>
+      <ul>
+        <li>Talking about wanting to die or to kill yourself.</li>
+        <li>Looking for ways to hurt yourself — searching online or acquiring means.</li>
+        <li>Talking about being a burden to others or feeling hopeless or trapped.</li>
+        <li>Withdrawing from friends, family, and activities you used to enjoy.</li>
+        <li>Extreme mood swings or giving away prized possessions.</li>
+        <li>Saying goodbye as if you won't see someone again.</li>
+      </ul>
+      <p>If you notice these signs, <strong style="color:#fca5a5;">take action immediately.</strong> Call a helpline, go to the nearest emergency room, or call 112.</p>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

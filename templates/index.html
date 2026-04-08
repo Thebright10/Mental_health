@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MentalAI — Mental Wellness Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Fraunces:wght@700;900&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════ */
+:root {
+  --indigo: #6366f1;
+  --violet: #8b5cf6;
+  --emerald: #10b981;
+  --pink: #ec4899;
+  --cyan: #06b6d4;
+  --amber: #f59e0b;
+  --dark: #060b18;
+  --dark2: #0f172a;
+  --dark3: #1e1b4b;
+  --white: #ffffff;
+  --muted: rgba(255,255,255,0.5);
+  --muted2: rgba(255,255,255,0.35);
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.12);
+  --surface: rgba(255,255,255,0.05);
+  --text-dark: #0f172a;
+  --text-mid: #334155;
+  --text-light: #64748b;
+  --bg-light: #f8faff;
+  --bg-light2: #f0f4ff;
+  --card-border: rgba(15,23,42,0.08);
+  --font: 'Plus Jakarta Sans', sans-serif;
+  --display: 'Fraunces', serif;
+}
+
+/* ═══════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); background: var(--bg-light); color: var(--text-dark); overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; font-family: var(--font); }
+
+/* ═══════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: var(--indigo); border-radius: 10px; }
+
+/* ═══════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════ */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 64px;
+  background: rgba(6,11,24,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 0 20px rgba(99,102,241,0.5);
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--white);
+  letter-spacing: -0.5px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  list-style: none;
+}
+
+.nav-links a {
+  padding: 6px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--muted);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--white);
+  background: var(--surface);
+}
+
+.nav-links a.active {
+  color: #a5b4fc;
+  background: rgba(99,102,241,0.12);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-ghost {
+  padding: 8px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: 9px;
+  transition: all 0.2s;
+}
+
+.btn-ghost:hover {
+  color: var(--white);
+  border-color: rgba(255,255,255,0.25);
+  background: var(--surface);
+}
+
+.btn-solid {
+  padding: 8px 20px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  border: none;
+  border-radius: 9px;
+  box-shadow: 0 0 20px rgba(99,102,241,0.4);
+  transition: all 0.2s;
+  letter-spacing: -0.2px;
+}
+
+.btn-solid:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 24px rgba(99,102,241,0.55);
+}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+.hero {
+  position: relative;
+  min-height: 94vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--dark);
+}
+
+.hero-bg-image {
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1800&auto=format&fit=crop&q=60') center/cover no-repeat;
+  opacity: 0.08;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.orb-1 {
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(99,102,241,0.4), transparent 65%);
+  top: -200px; left: -200px;
+  animation: drift1 12s ease-in-out infinite alternate;
+}
+
+.orb-2 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(16,185,129,0.25), transparent 65%);
+  bottom: -100px; right: 100px;
+  animation: drift2 14s ease-in-out infinite alternate;
+}
+
+.orb-3 {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(236,72,153,0.2), transparent 65%);
+  top: 30%; right: -50px;
+  animation: drift3 10s ease-in-out infinite alternate;
+}
+
+@keyframes drift1 { from{transform:translate(0,0);} to{transform:translate(40px,30px);} }
+@keyframes drift2 { from{transform:translate(0,0);} to{transform:translate(-30px,-40px);} }
+@keyframes drift3 { from{transform:translate(0,0);} to{transform:translate(-20px,30px);} }
+
+.hero-grid {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 80px 48px;
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  align-items: center;
+  gap: 60px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(99,102,241,0.14);
+  border: 1px solid rgba(99,102,241,0.3);
+  border-radius: 100px;
+  padding: 7px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #a5b4fc;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+.badge-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--emerald);
+  animation: pulsedot 2s ease-in-out infinite;
+}
+
+@keyframes pulsedot {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.4; transform:scale(0.7); }
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(42px,6vw,70px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.04;
+  letter-spacing: -2px;
+  margin-bottom: 22px;
+}
+
+.hero-title .grad {
+  background: linear-gradient(135deg, #a5b4fc, #c084fc, #6ee7b7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 17px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.8;
+  max-width: 500px;
+  margin-bottom: 40px;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 52px;
+  flex-wrap: wrap;
+}
+
+.btn-hero-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 32px;
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 4px 24px rgba(99,102,241,0.55);
+  transition: all 0.3s;
+  letter-spacing: -0.3px;
+}
+
+.btn-hero-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 36px rgba(99,102,241,0.6);
+}
+
+.btn-hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.75);
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  transition: all 0.3s;
+  backdrop-filter: blur(8px);
+}
+
+.btn-hero-secondary:hover {
+  background: rgba(255,255,255,0.12);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+.hero-stats {
+  display: flex;
+  gap: 36px;
+  padding-top: 36px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+.stat-num {
+  font-family: var(--display);
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--white);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.stat-lbl {
+  font-size: 12px;
+  color: var(--muted2);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* Floating cards */
+.hero-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.float-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(16px);
+  animation: float-bob 4s ease-in-out infinite alternate;
+}
+
+.float-card:nth-child(2) { animation-delay: 0.8s; }
+.float-card:nth-child(3) { animation-delay: 1.6s; }
+
+@keyframes float-bob {
+  from { transform: translateY(0px); }
+  to   { transform: translateY(-6px); }
+}
+
+.fc-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.fc-value {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--white);
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.fc-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 4px;
+}
+
+.progress-bar {
+  height: 5px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 100px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--indigo), var(--emerald));
+  border-radius: 100px;
+  animation: prog-grow 1.5s ease-out 0.5s both;
+}
+
+@keyframes prog-grow { from{width:0;} to{width:78%;} }
+
+.emotion-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16,185,129,0.14);
+  border: 1px solid rgba(16,185,129,0.25);
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #34d399;
+  margin-top: 10px;
+}
+
+/* ═══════════════════════════════════════
+   SECTIONS COMMON
+═══════════════════════════════════════ */
+.section { padding: 90px 48px; max-width: 1280px; margin: 0 auto; }
+.section-sm { padding: 64px 48px; max-width: 1280px; margin: 0 auto; }
+.section-full { padding: 90px 0; }
+.section-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+
+.section-chip {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--indigo);
+  background: rgba(99,102,241,0.09);
+  padding: 5px 16px;
+  border-radius: 100px;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(28px,4vw,42px);
+  font-weight: 900;
+  color: var(--text-dark);
+  letter-spacing: -1.2px;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.section-desc {
+  font-size: 15px;
+  color: var(--text-light);
+  line-height: 1.8;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.text-center { text-align: center; }
+.mb-12 { margin-bottom: 12px; }
+.mb-40 { margin-bottom: 40px; }
+.mb-48 { margin-bottom: 48px; }
+
+/* ═══════════════════════════════════════
+   REPORT STRIP
+═══════════════════════════════════════ */
+.report-section {
+  background: linear-gradient(135deg, var(--dark2), var(--dark3));
+  padding: 60px 0;
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.report-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 26px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.report-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+}
+
+.report-card:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-4px);
+}
+
+.report-icon { font-size: 24px; margin-bottom: 10px; }
+
+.report-value {
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--white);
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.report-label {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════
+   FEATURES
+═══════════════════════════════════════ */
+.features-bg { background: var(--white); border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feat-card {
+  background: var(--white);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.feat-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 18px 18px 0 0;
+}
+
+.feat-card:nth-child(1)::before { background: linear-gradient(90deg, var(--indigo), var(--violet)); }
+.feat-card:nth-child(2)::before { background: linear-gradient(90deg, var(--violet), var(--pink)); }
+.feat-card:nth-child(3)::before { background: linear-gradient(90deg, var(--emerald), var(--cyan)); }
+
+.feat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(99,102,241,0.12);
+  border-color: rgba(99,102,241,0.2);
+}
+
+.feat-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.feat-icon.i1 { background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(99,102,241,0.05)); }
+.feat-icon.i2 { background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(236,72,153,0.05)); }
+.feat-icon.i3 { background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(6,182,212,0.05)); }
+
+.feat-card h4 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+  letter-spacing: -0.4px;
+}
+
+.feat-card p {
+  font-size: 14px;
+  color: var(--text-light);
+  line-height: 1.75;
+  margin: 0;
+}
+
+.feat-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--indigo);
+  margin-top: 18px;
+  transition: gap 0.2s;
+}
+
+.feat-link:hover { gap: 8px; }
+
+/* ═══════════════════════════════════════
+   AWARENESS CARDS
+═══════════════════════════════════════ */
+.awareness-bg { background: var(--bg-light2); }
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.content-card {
+  background: var(--white);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.content-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+.content-card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.content-card:hover .content-card-img { transform: scale(1.04); }
+
+.content-card-img-wrap { overflow: hidden; }
+
+.cc-body { padding: 22px 20px; }
+
+.cc-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--indigo);
+  background: rgba(99,102,241,0.08);
+  padding: 4px 12px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+}
+
+.content-card h5 {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+
+.content-card p {
+  font-size: 13.5px;
+  color: var(--text-light);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════
+   REVIEWS
+═══════════════════════════════════════ */
+.reviews-section {
+  background: linear-gradient(135deg, var(--dark), var(--dark3));
+  padding: 90px 0;
+}
+
+.review-scroll {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 48px 16px;
+  scrollbar-width: none;
+}
+
+.review-scroll::-webkit-scrollbar { display: none; }
+
+.review-card {
+  flex: 0 0 min(380px, 85vw);
+  scroll-snap-align: start;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 18px;
+  padding: 30px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s;
+}
+
+.review-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-4px); }
+
+.review-stars { display: flex; gap: 3px; margin-bottom: 16px; }
+.review-stars span { color: var(--amber); font-size: 15px; }
+
+.review-text {
+  font-size: 15px;
+  font-style: italic;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.8;
+  margin-bottom: 22px;
+}
+
+.review-author { display: flex; align-items: center; gap: 12px; }
+
+.review-avatar {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--white);
+  flex-shrink: 0;
+}
+
+.review-name { font-size: 14px; font-weight: 700; color: var(--white); }
+.review-role { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+.scroll-hint {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,0.3);
+  margin-top: 24px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
+/* ═══════════════════════════════════════
+   IMPACT STATS
+═══════════════════════════════════════ */
+.impact-section {
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  padding: 80px 0;
+}
+
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.impact-item {
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  padding: 44px 32px;
+  text-align: center;
+}
+
+.impact-num {
+  font-family: var(--display);
+  font-size: clamp(30px,4vw,46px);
+  font-weight: 900;
+  color: var(--white);
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.impact-label {
+  font-size: 14px;
+  color: rgba(255,255,255,0.65);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════
+   PARTNERS
+═══════════════════════════════════════ */
+.partners-section { background: var(--white); border-top: 1px solid var(--card-border); }
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.partner-slot {
+  background: var(--bg-light);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 28px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+  transition: all 0.3s;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.partner-slot:hover {
+  border-color: rgba(99,102,241,0.3);
+  box-shadow: 0 4px 20px rgba(99,102,241,0.1);
+  color: var(--indigo);
+  background: rgba(99,102,241,0.03);
+}
+
+.partner-slot img {
+  max-height: 48px;
+  object-fit: contain;
+  filter: grayscale(100%) opacity(0.5);
+  transition: filter 0.3s;
+}
+
+.partner-slot:hover img { filter: grayscale(0%) opacity(1); }
+
+/* ═══════════════════════════════════════
+   EMOTION DETECTOR
+═══════════════════════════════════════ */
+.detector-section { background: var(--bg-light2); padding: 90px 0; }
+
+.detector-card {
+  background: var(--white);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 24px;
+  padding: 52px 44px;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(99,102,241,0.10);
+  position: relative;
+  overflow: hidden;
+}
+
+.detector-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--indigo), var(--violet), var(--pink));
+}
+
+.det-icon {
+  width: 68px; height: 68px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.14), rgba(139,92,246,0.08));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 24px;
+}
+
+.detector-card h2 {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+
+.detector-card .det-sub {
+  font-size: 14px;
+  color: var(--text-light);
+  line-height: 1.7;
+  margin-bottom: 30px;
+}
+
+.det-input {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-family: var(--font);
+  color: var(--text-dark);
+  background: var(--bg-light);
+  border: 1.5px solid rgba(99,102,241,0.2);
+  border-radius: 12px;
+  outline: none;
+  margin-bottom: 14px;
+  transition: all 0.2s;
+}
+
+.det-input::placeholder { color: #94a3b8; }
+
+.det-input:focus {
+  border-color: var(--indigo);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.10);
+}
+
+.btn-detect {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--font);
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+  transition: all 0.3s;
+  letter-spacing: -0.2px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
+.btn-detect:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(99,102,241,0.5);
+}
+
+.btn-detect:active { transform: scale(0.98); }
+
+.det-result {
+  margin-top: 24px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(139,92,246,0.04));
+  border: 1px solid rgba(99,102,241,0.18);
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+  display: none;
+}
+
+.det-result.show { display: block; animation: fadeup 0.4s ease; }
+
+@keyframes fadeup { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+
+.det-emoji { font-size: 32px; display: block; margin-bottom: 8px; }
+
+/* ═══════════════════════════════════════
+   CTA BAND
+═══════════════════════════════════════ */
+.cta-section {
+  background: var(--white);
+  border-top: 1px solid var(--card-border);
+  padding: 80px 48px;
+}
+
+.cta-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 36px;
+  flex-wrap: wrap;
+}
+
+.cta-text h3 {
+  font-family: var(--display);
+  font-size: clamp(24px,3.5vw,36px);
+  font-weight: 900;
+  color: var(--text-dark);
+  letter-spacing: -0.8px;
+  margin-bottom: 8px;
+}
+
+.cta-text p { font-size: 15px; color: var(--text-light); line-height: 1.7; }
+
+.cta-btns { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+.btn-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 30px;
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+  transition: all 0.3s;
+}
+
+.btn-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(99,102,241,0.5); }
+
+.btn-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 26px;
+  background: rgba(99,102,241,0.07);
+  color: var(--indigo);
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 12px;
+  border: 1px solid rgba(99,102,241,0.2);
+  transition: all 0.3s;
+}
+
+.btn-cta-secondary:hover { background: rgba(99,102,241,0.12); }
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer {
+  background: var(--dark);
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  padding: 30px;
+  font-size: 13.5px;
+  font-weight: 500;
+  border-top: 1px solid var(--border);
+}
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadein 0.6s ease forwards;
+}
+
+@keyframes fadein { to { opacity:1; transform:translateY(0); } }
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-cards { display: none; }
+  .features-grid, .content-grid { grid-template-columns: repeat(2, 1fr); }
+  .report-grid { grid-template-columns: repeat(2, 1fr); }
+  .impact-grid { grid-template-columns: repeat(2, 1fr); }
+  .partners-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .navbar { padding: 0 20px; }
+  .nav-links { display: none; }
+  .section, .section-sm { padding: 60px 20px; }
+  .features-grid, .content-grid { grid-template-columns: 1fr; }
+  .hero-grid { padding: 60px 24px; }
+  .cta-section { padding: 60px 24px; }
+  .cta-inner { flex-direction: column; align-items: flex-start; }
+  .review-scroll { padding: 0 20px 16px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <div class="nav-logo">
+    <div class="logo-mark">🧠</div>
+    <span class="logo-text">MentalAI</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/" class="active">Home</a></li>
+    <li><a href="/about/">About</a></li>
+    <li><a href="/reviews/">Reviews</a></li>
+    <li><a href="/partners/">Partners</a></li>
+    <li><a href="#">Chat AI</a></li>
+    <li><a href="#">Profile</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn-ghost">Login</button>
+    <button class="btn-solid">Register</button>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-bg-image"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-badge fade-in">
+        <div class="badge-dot"></div>
+        AI-Powered Mental Wellness
+      </div>
+      <h1 class="hero-title fade-in delay-100">
+        Your Mind.<br>
+        <span class="grad">Understood.</span>
+      </h1>
+      <p class="hero-sub fade-in delay-200">
+        Talk freely, track your emotions, and heal — with an AI companion that listens without judgment, 24 hours a day, 7 days a week.
+      </p>
+      <div class="hero-btns fade-in delay-300">
+        <a href="#" class="btn-hero-primary">✨ Start Chat with AI</a>
+        <a href="/about/" class="btn-hero-secondary">Learn More →</a>
+      </div>
+      <div class="hero-stats fade-in delay-400">
+        <div>
+          <div class="stat-num">50K+</div>
+          <div class="stat-lbl">Users Supported</div>
+        </div>
+        <div>
+          <div class="stat-num">120K+</div>
+          <div class="stat-lbl">AI Conversations</div>
+        </div>
+        <div>
+          <div class="stat-num">24/7</div>
+          <div class="stat-lbl">Always Available</div>
+        </div>
+        <div>
+          <div class="stat-num">40+</div>
+          <div class="stat-lbl">Partners</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-cards fade-in delay-500">
+      <div class="float-card">
+        <div class="fc-label">Today's Insight</div>
+        <div class="fc-value">78%</div>
+        <div class="fc-sub">Emotional Wellness Score</div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="emotion-tag">😊 Calm &amp; Positive</div>
+      </div>
+      <div class="float-card">
+        <div class="fc-label">AI Response Time</div>
+        <div class="fc-value">&lt; 1s</div>
+        <div class="fc-sub">Instant support, always</div>
+      </div>
+      <div class="float-card">
+        <div class="fc-label">Sessions This Week</div>
+        <div class="fc-value">7</div>
+        <div class="fc-sub">Keep your streak going 🔥</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ MENTAL HEALTH REPORT ═══════════════ -->
+<div class="report-section">
+  <div class="section-inner">
+    <div class="text-center mb-40">
+      <div class="section-chip" style="color:#a5b4fc; background:rgba(165,180,252,0.1);">Your Dashboard</div>
+      <h2 class="section-title" style="color:#fff; margin-top:10px;">Mental Health Report</h2>
+      <p class="section-desc" style="color:rgba(255,255,255,0.45);">A snapshot of your emotional wellness journey.</p>
+    </div>
+    <div class="report-grid">
+      <div class="report-card">
+        <div class="report-icon">🎯</div>
+        <div class="report-value">84</div>
+        <div class="report-label">Mental Score</div>
+      </div>
+      <div class="report-card">
+        <div class="report-icon">✅</div>
+        <div class="report-value" style="font-size:20px; padding-top:4px;">Stable</div>
+        <div class="report-label">Current Status</div>
+      </div>
+      <div class="report-card">
+        <div class="report-icon">💬</div>
+        <div class="report-value">12</div>
+        <div class="report-label">Total Sessions</div>
+      </div>
+      <div class="report-card">
+        <div class="report-icon">🧘</div>
+        <div class="report-value" style="font-size:20px; padding-top:4px;">Calm</div>
+        <div class="report-label">Last Emotion</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FEATURES ═══════════════ -->
+<div class="features-bg">
+  <div class="section">
+    <div class="text-center mb-48">
+      <div class="section-chip">Platform</div>
+      <h2 class="section-title">Everything You Need</h2>
+      <p class="section-desc">Powerful tools designed to support your mental wellness journey at every step.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon i1">🧠</div>
+        <h4>Emotion Detection</h4>
+        <p>Our AI analyzes emotions in your messages using advanced natural language processing — giving you real-time insight into your mental state.</p>
+        <a href="#" class="feat-link">Try it now →</a>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon i2">💬</div>
+        <h4>AI Support Chat</h4>
+        <p>Talk freely with an intelligent AI assistant available anytime. No appointments, no judgment — just compassionate, immediate emotional support.</p>
+        <a href="#" class="feat-link" style="color:#8b5cf6;">Open chat →</a>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon i3">📊</div>
+        <h4>Emotional Insights</h4>
+        <p>Track emotional patterns over time and gain meaningful mental wellness insights. Understand your triggers and celebrate your progress.</p>
+        <a href="#" class="feat-link" style="color:#10b981;">View insights →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ AWARENESS ═══════════════ -->
+<div class="awareness-bg">
+  <div class="section">
+    <div class="text-center mb-48">
+      <div class="section-chip">Wellness</div>
+      <h2 class="section-title">Mental Health Awareness</h2>
+      <p class="section-desc">Evidence-based approaches to improve your emotional balance and wellbeing.</p>
+    </div>
+    <div class="content-grid">
+      <div class="content-card">
+        <div class="content-card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&auto=format&fit=crop&q=70" alt="Meditation" class="content-card-img">
+        </div>
+        <div class="cc-body">
+          <span class="cc-badge">Mindfulness</span>
+          <h5>🧘 Meditation</h5>
+          <p>Mindfulness meditation helps calm the mind, reduce anxiety, and improve long-term emotional balance.</p>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1493836512294-502baa1986e2?w=800&auto=format&fit=crop&q=70" alt="Music Therapy" class="content-card-img">
+        </div>
+        <div class="cc-body">
+          <span class="cc-badge" style="color:#8b5cf6; background:rgba(139,92,246,0.08);">Therapy</span>
+          <h5>🎵 Music Therapy</h5>
+          <p>Music therapy is a proven method to reduce stress, improve mood, and enhance emotional wellbeing.</p>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1455849318743-b2233052fcff?w=800&auto=format&fit=crop&q=70" alt="Creative Activities" class="content-card-img">
+        </div>
+        <div class="cc-body">
+          <span class="cc-badge" style="color:#10b981; background:rgba(16,185,129,0.08);">Expression</span>
+          <h5>🎨 Creative Activities</h5>
+          <p>Creative hobbies like painting, writing, or singing provide healthy emotional outlets and build resilience.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CAMPAIGNS ═══════════════ -->
+<div class="features-bg">
+  <div class="section">
+    <div class="text-center mb-48">
+      <div class="section-chip" style="color:#ec4899; background:rgba(236,72,153,0.08);">Initiatives</div>
+      <h2 class="section-title">Our Campaigns</h2>
+      <p class="section-desc">Real-world programs creating meaningful change in communities worldwide.</p>
+    </div>
+    <div class="content-grid">
+      <div class="content-card">
+        <div class="content-card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&auto=format&fit=crop&q=70" alt="Community" class="content-card-img">
+        </div>
+        <div class="cc-body">
+          <span class="cc-badge">Community</span>
+          <h5>Community Awareness</h5>
+          <p>We conduct workshops and community events to promote mental wellbeing at the grassroots level.</p>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800&auto=format&fit=crop&q=70" alt="Student Support" class="content-card-img">
+        </div>
+        <div class="cc-body">
+          <span class="cc-badge" style="color:#8b5cf6; background:rgba(139,92,246,0.08);">Education</span>
+          <h5>Student Support</h5>
+          <p>Specialized programs designed to help students navigate stress, anxiety, and academic pressure.</p>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&auto=format&fit=crop&q=70" alt="Global Day" class="content-card-img">
+        </div>
+        <div class="cc-body">
+          <span class="cc-badge" style="color:#10b981; background:rgba(16,185,129,0.08);">Global</span>
+          <h5>Global Mental Health Day</h5>
+          <p>Annual campaigns that spread awareness and reduce stigma around emotional wellbeing worldwide.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ REVIEWS ═══════════════ -->
+<section class="reviews-section">
+  <div class="section-inner">
+    <div class="text-center mb-48">
+      <div class="section-chip" style="color:#a78bfa; background:rgba(167,139,250,0.12);">Testimonials</div>
+      <h2 class="section-title" style="color:#fff; margin-top:10px;">What Our Users Say</h2>
+      <p class="section-desc" style="color:rgba(255,255,255,0.45);">Real stories from people whose lives have been touched by MentalAI.</p>
+    </div>
+  </div>
+  <div class="review-scroll">
+    <div class="review-card">
+      <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <p class="review-text">"This AI chatbot helped me express my feelings when I had no one to talk to. It truly feels like someone actually listens."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">SM</div>
+        <div>
+          <div class="review-name">Sarah M.</div>
+          <div class="review-role">Student, Mumbai</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <p class="review-text">"I love how the AI understands emotions and gives supportive, thoughtful responses. It has genuinely helped me through tough times."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4);">DK</div>
+        <div>
+          <div class="review-name">Daniel K.</div>
+          <div class="review-role">Engineer, Bangalore</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <p class="review-text">"A powerful mental health support tool. It feels safe and supportive — like having a therapist right in your pocket."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);">PR</div>
+        <div>
+          <div class="review-name">Priya R.</div>
+          <div class="review-role">Designer, Pune</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <p class="review-text">"MentalAI helped me through my toughest days. The emotion tracking showed me patterns I had never noticed before."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">AK</div>
+        <div>
+          <div class="review-name">Arjun K.</div>
+          <div class="review-role">Startup Founder</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">← Scroll to see more →</div>
+</section>
+
+<!-- ═══════════════ PARTNERS ═══════════════ -->
+<div class="partners-section">
+  <div class="section">
+    <div class="text-center mb-48">
+      <div class="section-chip">Trusted By</div>
+      <h2 class="section-title">Our Partners</h2>
+      <p class="section-desc">Working with leading organizations to advance mental health globally.</p>
+    </div>
+    <div class="partners-grid">
+      <div class="partner-slot">🌐 HealthCorp</div>
+      <div class="partner-slot">🏥 MedMind</div>
+      <div class="partner-slot">🎓 EduCare</div>
+      <div class="partner-slot">💙 WellBeing Co.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ IMPACT ═══════════════ -->
+<section class="impact-section">
+  <div class="section-inner">
+    <div class="text-center mb-48">
+      <div class="section-chip" style="color:#fff; background:rgba(255,255,255,0.15);">Our Impact</div>
+      <h2 class="section-title" style="color:#fff; margin-top:10px;">Mental Health Impact</h2>
+      <p class="section-desc" style="color:rgba(255,255,255,0.65);">Numbers that reflect real lives touched and real change made.</p>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-item">
+        <div class="impact-num">50K+</div>
+        <div class="impact-label">Users Supported</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">120K+</div>
+        <div class="impact-label">AI Conversations</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">40+</div>
+        <div class="impact-label">Partner Orgs</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-num">24/7</div>
+        <div class="impact-label">Emotional Support</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ EMOTION DETECTOR ═══════════════ -->
+<section class="detector-section">
+  <div class="section-inner">
+    <div class="detector-card">
+      <div class="det-icon">🧠</div>
+      <h2>AI Emotion Detector</h2>
+      <p class="det-sub">Type how you're feeling and our AI will analyze your emotional state in real time.</p>
+      <input type="text" id="emotText" class="det-input" placeholder="e.g., I feel anxious about tomorrow..." maxlength="300" autocomplete="off">
+      <button class="btn-detect" onclick="detectEmotion()" id="detectBtn">
+        <span id="detectBtnText">✨ Detect Emotion</span>
+      </button>
+      <div class="det-result" id="emotionResult">
+        <span class="det-emoji" id="emotionEmoji">😊</span>
+        Detected: <strong id="emotionValue"></strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h3>Ready to start your wellness journey?</h3>
+      <p>Join thousands of users who've found clarity, calm, and connection.</p>
+    </div>
+    <div class="cta-btns">
+      <a href="#" class="btn-cta-primary">✨ Start Free Chat</a>
+      <a href="#" class="btn-cta-secondary">Create Account</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <p>© 2025 MentalAI — AI Mental Health Platform | Emotional Support through AI</p>
+</footer>
+
+<script>
+  const emojiMap = {
+    happy:'😊',joy:'😄',excited:'🎉',sad:'😢',sadness:'😞',grief:'💔',
+    angry:'😠',anger:'🔥',frustrated:'😤',anxious:'😰',anxiety:'😟',
+    fear:'😨',scared:'😱',calm:'😌',peaceful:'🕊️',relaxed:'😎',
+    neutral:'😐',surprised:'😲',confused:'😕',love:'❤️',grateful:'🙏',hopeful:'🌟'
+  };
+
+  const keywords = {
+    happy: ['happy','great','wonderful','amazing','fantastic','joy','joyful'],
+    sad: ['sad','depressed','down','lonely','cry','crying','grief','heartbroken'],
+    anxious: ['anxious','anxiety','nervous','worry','worried','scared','fear','afraid'],
+    angry: ['angry','mad','frustrated','furious','upset','rage','irritated'],
+    calm: ['calm','peaceful','relaxed','fine','okay','good','serene','tranquil'],
+    excited: ['excited','thrilled','energetic','pumped','eager','enthusiastic'],
+    hopeful: ['hopeful','optimistic','forward','better','confident','motivated'],
+    love: ['love','miss','adore','cherish','affection'],
+    grateful: ['grateful','thankful','blessed','appreciate','gratitude'],
+    confused: ['confused','lost','unsure','uncertain','overwhelmed']
+  };
+
+  function detectEmotion() {
+    const text = document.getElementById('emotText').value.trim();
+    if (!text) return;
+    const btn = document.getElementById('detectBtnText');
+    btn.textContent = 'Analyzing…';
+
+    // Simulate API call (replace with actual fetch to /detect-emotion/)
+    setTimeout(() => {
+      const lower = text.toLowerCase();
+      let detected = 'neutral';
+      for (const [emotion, words] of Object.entries(keywords)) {
+        if (words.some(w => lower.includes(w))) { detected = emotion; break; }
+      }
+      const emoji = emojiMap[detected] || '💭';
+      document.getElementById('emotionEmoji').textContent = emoji;
+      document.getElementById('emotionValue').textContent = detected.charAt(0).toUpperCase() + detected.slice(1);
+      document.getElementById('emotionResult').classList.add('show');
+      btn.textContent = '✨ Detect Emotion';
+    }, 900);
+  }
+
+  document.getElementById('emotText').addEventListener('keypress', e => {
+    if (e.key === 'Enter') detectEmotion();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+    --sage: #7c9e8a;
+    --sage-light: #e8f0eb;
+    --sage-dark: #3d5c4a;
+    --cream: #faf8f4;
+    --warm-white: #ffffff;
+    --ink: #1a1f1c;
+    --ink-muted: #4a5250;
+    --ink-faint: #8a9490;
+    --accent: #c4856a;
+    --accent-light: #f5ede8;
+    --border: rgba(124,158,138,0.18);
+    --shadow-soft: 0 2px 24px rgba(61,92,74,0.07);
+    --radius: 20px;
+    --radius-sm: 12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(--ink); }
+
+/* ── Page wrapper ── */
+.about-wrap { max-width: 960px; margin: 0 auto; padding: 72px 24px 100px; }
+
+/* ── Hero ── */
+.about-hero {
+    text-align: center;
+    margin-bottom: 80px;
+    position: relative;
+}
+.about-hero-eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--sage);
+    background: var(--sage-light);
+    padding: 6px 18px;
+    border-radius: 999px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(124,158,138,0.25);
+}
+.about-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 6vw, 64px);
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+}
+.about-hero h1 em {
+    font-style: italic;
+    color: var(--sage-dark);
+}
+.about-hero-sub {
+    font-size: 17px;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto 40px;
+    font-weight: 300;
+}
+.hero-divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--sage), var(--accent));
+    border-radius: 999px;
+    margin: 0 auto;
+}
+
+/* ── Feature strip ── */
+.feature-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 72px;
+}
+.feature-tile {
+    background: var(--warm-white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 32px 28px;
+    box-shadow: var(--shadow-soft);
+    transition: box-shadow 0.25s, transform 0.25s;
+    position: relative;
+    overflow: hidden;
+}
+.feature-tile::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+}
+.feature-tile.t1::after { background: var(--sage); }
+.feature-tile.t2::after { background: var(--accent); }
+.feature-tile.t3::after { background: #7a8ec4; }
+.feature-tile:hover { box-shadow: 0 8px 40px rgba(61,92,74,0.13); transform: translateY(-3px); }
+.feature-icon {
+    width: 48px; height: 48px;
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 18px;
+}
+.t1 .feature-icon { background: var(--sage-light); }
+.t2 .feature-icon { background: var(--accent-light); }
+.t3 .feature-icon { background: #eef0f8; }
+.feature-tile h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+}
+.feature-tile p {
+    font-size: 14px;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+/* ── Content sections ── */
+.content-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+    margin-bottom: 32px;
+}
+.content-block {
+    background: var(--warm-white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 36px 32px;
+    box-shadow: var(--shadow-soft);
+}
+.content-block.full {
+    grid-column: 1 / -1;
+}
+.block-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--sage);
+    margin-bottom: 16px;
+}
+.content-block h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 16px;
+    line-height: 1.25;
+}
+.content-block p {
+    font-size: 15px;
+    color: var(--ink-muted);
+    line-height: 1.8;
+    font-weight: 300;
+    margin-bottom: 14px;
+}
+.content-block p:last-child { margin-bottom: 0; }
+
+/* ── Emotion tags ── */
+.emotion-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+.emo-tag {
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid;
+    transition: transform 0.2s;
+    cursor: default;
+}
+.emo-tag:hover { transform: scale(1.06); }
+.emo-joy { background: #fefce8; color: #78600a; border-color: rgba(120,96,10,0.2); }
+.emo-sad { background: #eff6ff; color: #1d4ed8; border-color: rgba(29,78,216,0.2); }
+.emo-anger { background: #fef2f2; color: #b91c1c; border-color: rgba(185,28,28,0.2); }
+.emo-fear { background: #f5f3ff; color: #6d28d9; border-color: rgba(109,40,217,0.2); }
+.emo-calm { background: var(--sage-light); color: var(--sage-dark); border-color: rgba(61,92,74,0.2); }
+.emo-hope { background: var(--accent-light); color: #7c3410; border-color: rgba(196,133,106,0.25); }
+
+/* ── Mission block ── */
+.mission-block {
+    background: linear-gradient(135deg, var(--sage-dark) 0%, #2d4a38 100%);
+    border-radius: var(--radius);
+    padding: 56px 48px;
+    text-align: center;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+}
+.mission-block::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 280px; height: 280px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 50%;
+}
+.mission-block blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3vw, 28px);
+    font-style: italic;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.5;
+    max-width: 680px;
+    margin: 0 auto 20px;
+    position: relative;
+    z-index: 1;
+}
+.mission-block cite {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-style: normal;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 760px) {
+    .feature-strip { grid-template-columns: 1fr; }
+    .content-split { grid-template-columns: 1fr; }
+    .mission-block { padding: 40px 28px; }
+}
+</style>
+
+<div class="about-wrap">
+
+    <!-- Hero -->
+    <div class="about-hero">
+        <div class="about-hero-eyebrow">AI Mental Health Platform</div>
+        <h1>Your mind deserves<br><em>intelligent care</em></h1>
+        <p class="about-hero-sub">
+            We blend advanced artificial intelligence with emotional awareness
+            to give everyone a safe, private space to express and understand their feelings.
+        </p>
+        <div class="hero-divider"></div>
+    </div>
+
+    <!-- Feature strip -->
+    <div class="feature-strip">
+        <div class="feature-tile t1">
+            <div class="feature-icon">🧠</div>
+            <h3>Emotion Analysis</h3>
+            <p>Real-time detection of complex emotional states through natural language and facial expression models.</p>
+        </div>
+        <div class="feature-tile t2">
+            <div class="feature-icon">💬</div>
+            <h3>Conversational AI</h3>
+            <p>A compassionate AI companion trained to respond with empathy, patience, and context-awareness.</p>
+        </div>
+        <div class="feature-tile t3">
+            <div class="feature-icon">📊</div>
+            <h3>Progress Reports</h3>
+            <p>Structured mental health reports that track patterns over time and highlight risk indicators.</p>
+        </div>
+    </div>
+
+    <!-- Content blocks -->
+    <div class="content-split">
+        <div class="content-block">
+            <div class="block-label">How It Works</div>
+            <h2>Advanced NLP at Your Service</h2>
+            <p>
+                Our system uses natural language processing models trained on large emotional datasets
+                to detect feelings with nuance — not just positive or negative, but the full spectrum
+                of human experience.
+            </p>
+            <div class="emotion-cloud">
+                <span class="emo-tag emo-joy">Joy</span>
+                <span class="emo-tag emo-sad">Sadness</span>
+                <span class="emo-tag emo-anger">Anger</span>
+                <span class="emo-tag emo-fear">Fear</span>
+                <span class="emo-tag emo-calm">Calm</span>
+                <span class="emo-tag emo-hope">Hope</span>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <div class="block-label">Our Approach</div>
+            <h2>Safe, Private, Accessible</h2>
+            <p>
+                Mental health is one of the most important aspects of overall wellbeing.
+                Our platform gives individuals a judgment-free space to express their feelings safely,
+                any time of day.
+            </p>
+            <p>
+                Every interaction is confidential, and your data is used solely to help you
+                better understand your own emotional patterns — never shared.
+            </p>
+        </div>
+
+        <!-- Mission quote -->
+        <div class="content-block full">
+            <div class="mission-block">
+                <blockquote>
+                    "To provide accessible emotional support for people worldwide
+                    through intelligent, compassionate AI systems."
+                </blockquote>
+                <cite>Our Mission</cite>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

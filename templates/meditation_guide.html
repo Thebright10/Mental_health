@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .meditation-page { min-height: 100vh; padding-top: 72px; position: relative; overflow: hidden; font-family: 'Poppins', sans-serif; }
+  .med-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .med-bg-video { width: 100%; height: 100%; object-fit: cover; opacity: 0.1; filter: saturate(0.8) blur(2px); }
+  .med-bg-overlay { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(52,211,153,0.12) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 100% 100%, rgba(14,165,233,0.08) 0%, transparent 60%), linear-gradient(180deg, rgba(5,13,26,0.7) 0%, rgba(5,13,26,0.4) 50%, rgba(5,13,26,0.8) 100%); }
+  .med-orb { position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; animation: orbFloat 16s ease-in-out infinite; }
+  .med-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(52,211,153,0.12), transparent); top: -200px; right: -100px; }
+  .med-orb-2 { width: 450px; height: 450px; background: radial-gradient(circle, rgba(14,165,233,0.1), transparent); bottom: 100px; left: -100px; animation-delay: -8s; }
+  @keyframes orbFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-25px)} }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.4)} }
+  @keyframes breathe { 0%,100%{transform:scale(1);opacity:0.5} 50%{transform:scale(1.15);opacity:0.9} }
+  @keyframes rotateSlow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+  @keyframes fadeInUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  .med-content { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 80px 40px 120px; }
+
+  /* HERO */
+  .med-hero { text-align: center; padding-bottom: 80px; }
+  .med-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 7px 18px; border-radius: 50px; background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.2); font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #34d399; margin-bottom: 24px; backdrop-filter: blur(8px); }
+  .med-eyebrow::before { content:''; width:6px; height:6px; border-radius:50%; background:#34d399; animation: pulse 2s infinite; }
+  .med-title { font-size: clamp(48px, 7vw, 88px); font-weight: 900; letter-spacing: -3px; margin-bottom: 20px; background: linear-gradient(135deg, #f0f9ff 0%, #34d399 40%, #38bdf8 80%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .med-subtitle { font-size: 18px; color: rgba(240,249,255,0.6); max-width: 560px; margin: 0 auto 56px; line-height: 1.8; }
+
+  /* BREATHING WIDGET */
+  .breathing-widget {
+    width: 280px; height: 280px; border-radius: 50%; margin: 0 auto 80px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; cursor: pointer;
+  }
+  .breathing-ring { position: absolute; inset: 0; border-radius: 50%; }
+  .ring-1 { border: 1px solid rgba(52,211,153,0.15); animation: breathe 4s ease-in-out infinite; }
+  .ring-2 { border: 1px solid rgba(52,211,153,0.1); inset: -20px; animation: breathe 4s ease-in-out infinite 0.5s; border-radius: 50%; position: absolute; }
+  .ring-3 { border: 1px solid rgba(52,211,153,0.06); inset: -40px; animation: breathe 4s ease-in-out infinite 1s; border-radius: 50%; position: absolute; }
+  .breathing-inner {
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(52,211,153,0.15) 0%, rgba(14,165,233,0.05) 60%, transparent 100%);
+    border: 1px solid rgba(52,211,153,0.3);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    animation: breathe 4s ease-in-out infinite;
+    position: relative; z-index: 1;
+  }
+  .breathing-icon { font-size: 36px; margin-bottom: 8px; }
+  .breathing-label { font-size: 14px; font-weight: 700; color: #34d399; letter-spacing: 1px; }
+  .breathing-hint { font-size: 13px; color: rgba(240,249,255,0.4); text-align: center; margin-top: 16px; }
+
+  /* TECHNIQUES GRID */
+  .med-techniques { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 80px; }
+  .med-technique-card {
+    border-radius: 22px; padding: 36px 28px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    backdrop-filter: blur(12px); cursor: pointer;
+    position: relative; overflow: hidden;
+  }
+  .med-technique-card::before { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; opacity:0; transition: opacity 0.3s; }
+  .med-technique-card.green::before { background: linear-gradient(90deg, #34d399, #6ee7b7); }
+  .med-technique-card.blue::before { background: linear-gradient(90deg, #0ea5e9, #38bdf8); }
+  .med-technique-card.purple::before { background: linear-gradient(90deg, #818cf8, #a5b4fc); }
+  .med-technique-card.teal::before { background: linear-gradient(90deg, #2dd4bf, #34d399); }
+  .med-technique-card.rose::before { background: linear-gradient(90deg, #fb7185, #fda4af); }
+  .med-technique-card.amber::before { background: linear-gradient(90deg, #fbbf24, #fcd34d); }
+  .med-technique-card:hover { transform: translateY(-8px); background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.12); box-shadow: 0 28px 80px rgba(0,0,0,0.4); }
+  .med-technique-card:hover::before { opacity: 1; }
+  .med-technique-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+  .med-technique-name { font-size: 18px; font-weight: 800; color: #f0f9ff; margin-bottom: 8px; }
+  .med-technique-time { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+  .green .med-technique-time { color: #34d399; }
+  .blue .med-technique-time { color: #38bdf8; }
+  .purple .med-technique-time { color: #a5b4fc; }
+  .teal .med-technique-time { color: #2dd4bf; }
+  .rose .med-technique-time { color: #fb7185; }
+  .amber .med-technique-time { color: #fbbf24; }
+  .med-technique-desc { font-size: 13.5px; color: rgba(240,249,255,0.55); line-height: 1.75; }
+
+  /* AUDIO PLAYER STYLED */
+  .med-sessions { margin-bottom: 80px; }
+  .med-section-title { font-size: 32px; font-weight: 900; letter-spacing: -1px; color: #f0f9ff; margin-bottom: 32px; }
+  .session-list { display: flex; flex-direction: column; gap: 12px; }
+  .session-item {
+    display: flex; align-items: center; gap: 20px;
+    padding: 20px 24px; border-radius: 16px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    transition: all 0.3s ease; cursor: pointer;
+  }
+  .session-item:hover { background: rgba(52,211,153,0.06); border-color: rgba(52,211,153,0.2); transform: translateX(4px); }
+  .session-play { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, rgba(52,211,153,0.2), rgba(14,165,233,0.1)); border: 1px solid rgba(52,211,153,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; transition: all 0.3s; }
+  .session-item:hover .session-play { background: linear-gradient(135deg, #34d399, #0ea5e9); border-color: transparent; transform: scale(1.1); }
+  .session-info { flex: 1; }
+  .session-name { font-size: 15px; font-weight: 700; color: #f0f9ff; margin-bottom: 4px; }
+  .session-meta { font-size: 12px; color: rgba(240,249,255,0.4); }
+  .session-duration { font-size: 13px; font-weight: 700; color: rgba(240,249,255,0.5); flex-shrink: 0; }
+  .session-tag { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 50px; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); color: #34d399; letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; }
+
+  /* PROGRESS */
+  .med-progress { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 56px; }
+  .progress-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 24px; text-align: center; }
+  .progress-num { font-size: 36px; font-weight: 900; background: linear-gradient(135deg, #34d399, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .progress-label { font-size: 12px; color: rgba(240,249,255,0.4); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+  @media (max-width: 900px) { .med-techniques { grid-template-columns: 1fr 1fr; } .med-progress { grid-template-columns: 1fr 1fr; } .med-content { padding: 60px 20px 80px; } }
+  @media (max-width: 480px) { .med-techniques { grid-template-columns: 1fr; } }
+</style>
+
+<div class="meditation-page">
+  <div class="med-bg">
+    <video class="med-bg-video" autoplay muted loop playsinline>
+      <source src="https://cdn.coverr.co/videos/coverr-calm-ocean-waves-8543/1080p.mp4" type="video/mp4">
+    </video>
+    <div class="med-bg-overlay"></div>
+  </div>
+  <div class="med-orb med-orb-1"></div>
+  <div class="med-orb med-orb-2"></div>
+
+  <div class="med-content">
+
+    <!-- Hero -->
+    <div class="med-hero" data-aos="fade-up">
+      <div class="med-eyebrow">Mindfulness</div>
+      <h1 class="med-title">Meditation Guide</h1>
+      <p class="med-subtitle">Scientifically-backed mindfulness practices to reduce anxiety, improve sleep, and build lasting emotional resilience.</p>
+
+      <!-- Breathing Widget -->
+      <div class="breathing-widget" id="breatheWidget" data-aos="fade-up" data-aos-delay="200">
+        <div class="breathing-ring ring-1"></div>
+        <div class="breathing-ring ring-2"></div>
+        <div class="breathing-ring ring-3"></div>
+        <div class="breathing-inner">
+          <div class="breathing-icon">🌿</div>
+          <div class="breathing-label">BREATHE</div>
+        </div>
+      </div>
+      <div class="breathing-hint" data-aos="fade-up" data-aos-delay="300">Follow the rhythm — breathe in as it expands, out as it contracts</div>
+    </div>
+
+    <!-- Techniques -->
+    <div data-aos="fade-up">
+      <div class="med-section-title">Practices</div>
+    </div>
+    <div class="med-techniques">
+      <div class="med-technique-card green" data-aos="fade-up" data-aos-delay="0">
+        <span class="med-technique-icon">🧘</span>
+        <div class="med-technique-name">Mindfulness Meditation</div>
+        <div class="med-technique-time">10–20 min daily</div>
+        <p class="med-technique-desc">Anchor attention to the present by focusing on breath, body sensations, or sounds. Reduces anxiety and improves focus within weeks.</p>
+      </div>
+      <div class="med-technique-card blue" data-aos="fade-up" data-aos-delay="100">
+        <span class="med-technique-icon">🌊</span>
+        <div class="med-technique-name">Body Scan</div>
+        <div class="med-technique-time">15–30 min</div>
+        <p class="med-technique-desc">Progressively relax each part of the body from toes to crown. Deeply effective for releasing tension and improving sleep quality.</p>
+      </div>
+      <div class="med-technique-card purple" data-aos="fade-up" data-aos-delay="200">
+        <span class="med-technique-icon">💜</span>
+        <div class="med-technique-name">Loving-Kindness (Metta)</div>
+        <div class="med-technique-time">10–15 min</div>
+        <p class="med-technique-desc">Cultivate compassion for yourself and others. Clinically shown to reduce depression, loneliness, and interpersonal conflict.</p>
+      </div>
+      <div class="med-technique-card teal" data-aos="fade-up" data-aos-delay="0">
+        <span class="med-technique-icon">🌬️</span>
+        <div class="med-technique-name">Pranayama Breathing</div>
+        <div class="med-technique-time">5–10 min</div>
+        <p class="med-technique-desc">Ancient yogic breath control including 4-7-8, alternate nostril, and box breathing. Instantly modulates your nervous system state.</p>
+      </div>
+      <div class="med-technique-card rose" data-aos="fade-up" data-aos-delay="100">
+        <span class="med-technique-icon">🌹</span>
+        <div class="med-technique-name">NSDR / Yoga Nidra</div>
+        <div class="med-technique-time">20 min</div>
+        <p class="med-technique-desc">Non-Sleep Deep Rest protocol used by neuroscientists. Restores mental energy equivalent to hours of sleep in just 20 minutes.</p>
+      </div>
+      <div class="med-technique-card amber" data-aos="fade-up" data-aos-delay="200">
+        <span class="med-technique-icon">🚶</span>
+        <div class="med-technique-name">Walking Meditation</div>
+        <div class="med-technique-time">10–30 min</div>
+        <p class="med-technique-desc">Mindful walking combines movement with presence. Ideal for those who struggle with seated practice or need mood improvement.</p>
+      </div>
+    </div>
+
+    <!-- Guided Sessions -->
+    <div class="med-sessions" data-aos="fade-up">
+      <div class="med-section-title">Guided Sessions</div>
+      <div class="session-list">
+        <div class="session-item">
+          <div class="session-play">▶</div>
+          <div class="session-info">
+            <div class="session-name">Morning Clarity — Start Your Day with Intention</div>
+            <div class="session-meta">Guided by Dr. Priya Sharma · Mindfulness & Breath</div>
+          </div>
+          <span class="session-tag">Beginner</span>
+          <div class="session-duration">10 min</div>
+        </div>
+        <div class="session-item">
+          <div class="session-play">▶</div>
+          <div class="session-info">
+            <div class="session-name">Anxiety Release — Calm the Nervous System</div>
+            <div class="session-meta">Guided by Dr. Arjun Mehta · Body Scan & Breath</div>
+          </div>
+          <span class="session-tag">All Levels</span>
+          <div class="session-duration">15 min</div>
+        </div>
+        <div class="session-item">
+          <div class="session-play">▶</div>
+          <div class="session-info">
+            <div class="session-name">Deep Sleep Induction — Yoga Nidra Protocol</div>
+            <div class="session-meta">Guided by Dr. Kavya Nair · NSDR Technique</div>
+          </div>
+          <span class="session-tag">Advanced</span>
+          <div class="session-duration">20 min</div>
+        </div>
+        <div class="session-item">
+          <div class="session-play">▶</div>
+          <div class="session-info">
+            <div class="session-name">Self-Compassion — Loving-Kindness Meditation</div>
+            <div class="session-meta">Guided by Dr. Rohan Das · Metta Practice</div>
+          </div>
+          <span class="session-tag">Beginner</span>
+          <div class="session-duration">12 min</div>
+        </div>
+        <div class="session-item">
+          <div class="session-play">▶</div>
+          <div class="session-info">
+            <div class="session-name">Trauma-Sensitive Mindfulness — Gentle Grounding</div>
+            <div class="session-meta">Guided by Dr. Sunita Patel · Somatic Awareness</div>
+          </div>
+          <span class="session-tag">Gentle</span>
+          <div class="session-duration">18 min</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Stats -->
+    <div data-aos="fade-up">
+      <div class="med-section-title">Community Impact</div>
+      <div class="med-progress">
+        <div class="progress-card">
+          <div class="progress-num">1.2M</div>
+          <div class="progress-label">Sessions Completed</div>
+        </div>
+        <div class="progress-card">
+          <div class="progress-num">87%</div>
+          <div class="progress-label">Report Less Anxiety</div>
+        </div>
+        <div class="progress-card">
+          <div class="progress-num">14</div>
+          <div class="progress-label">Days to Feel Impact</div>
+        </div>
+        <div class="progress-card">
+          <div class="progress-num">4.9★</div>
+          <div class="progress-label">Average Rating</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Interactive breathing animation toggle
+const widget = document.getElementById('breatheWidget');
+const label = widget.querySelector('.breathing-label');
+let active = true;
+const phases = ['INHALE', 'HOLD', 'EXHALE', 'HOLD'];
+const durations = [4000, 2000, 4000, 2000];
+let phaseIndex = 0;
+
+function cycleBreath() {
+  label.textContent = phases[phaseIndex];
+  setTimeout(() => {
+    phaseIndex = (phaseIndex + 1) % phases.length;
+    if (active) cycleBreath();
+  }, durations[phaseIndex]);
+}
+
+widget.addEventListener('click', () => {
+  active = !active;
+  if (active) cycleBreath();
+  else label.textContent = 'BREATHE';
+});
+
+cycleBreath();
+</script>
+{% endblock %}

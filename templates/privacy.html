@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .legal-page { min-height: 100vh; padding-top: 72px; position: relative; overflow: hidden; font-family: 'Poppins', sans-serif; }
+
+  /* BG */
+  .legal-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .legal-bg-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.05; filter: blur(4px) saturate(1.5); }
+  .legal-bg-overlay {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 50% at 30% 20%, rgba(14,165,233,0.1) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 70% at 80% 80%, rgba(129,140,248,0.08) 0%, transparent 60%),
+                linear-gradient(180deg, rgba(5,13,26,0.7) 0%, rgba(5,13,26,0.5) 100%);
+  }
+
+  /* ORBS */
+  .legal-orb { position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; animation: orbFloat 14s ease-in-out infinite; }
+  .legal-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(14,165,233,0.1), transparent); top: -200px; right: -150px; }
+  .legal-orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(129,140,248,0.08), transparent); bottom: 200px; left: -100px; animation-delay: -6s; }
+  @keyframes orbFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-20px)} }
+
+  /* CONTENT */
+  .legal-content { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; padding: 80px 40px 120px; }
+
+  /* HERO */
+  .legal-hero { text-align: center; padding-bottom: 64px; border-bottom: 1px solid rgba(255,255,255,0.07); margin-bottom: 64px; }
+  .legal-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px; padding: 7px 18px; border-radius: 50px;
+    background: rgba(14,165,233,0.08); border: 1px solid rgba(14,165,233,0.2);
+    font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #38bdf8;
+    margin-bottom: 24px; backdrop-filter: blur(8px);
+  }
+  .legal-eyebrow::before { content:''; width:6px; height:6px; border-radius:50%; background:#38bdf8; animation: pulse 2s infinite; }
+  .legal-title { font-size: clamp(40px, 6vw, 72px); font-weight: 900; letter-spacing: -2px; margin-bottom: 16px; background: linear-gradient(135deg, #f0f9ff 0%, #38bdf8 60%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .legal-meta { font-size: 13px; color: rgba(240,249,255,0.4); font-weight: 500; letter-spacing: 0.5px; }
+
+  /* TOC */
+  .legal-toc {
+    background: rgba(14,165,233,0.05); border: 1px solid rgba(14,165,233,0.12); border-radius: 20px;
+    padding: 32px 36px; margin-bottom: 56px; backdrop-filter: blur(16px);
+  }
+  .legal-toc h4 { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #38bdf8; margin-bottom: 20px; }
+  .legal-toc ol { padding-left: 20px; margin: 0; }
+  .legal-toc li { margin-bottom: 10px; }
+  .legal-toc a { font-size: 14px; font-weight: 500; color: rgba(240,249,255,0.6); text-decoration: none; transition: color 0.2s; }
+  .legal-toc a:hover { color: #38bdf8; }
+
+  /* SECTION */
+  .legal-section { margin-bottom: 52px; scroll-margin-top: 100px; }
+  .section-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, rgba(14,165,233,0.2), rgba(129,140,248,0.1));
+    border: 1px solid rgba(14,165,233,0.2);
+    font-size: 13px; font-weight: 800; color: #38bdf8; margin-bottom: 16px;
+  }
+  .legal-section h2 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: #f0f9ff; margin-bottom: 16px; }
+  .legal-section p { font-size: 15px; font-weight: 400; color: rgba(240,249,255,0.6); line-height: 1.85; margin-bottom: 14px; }
+  .legal-section ul { padding-left: 0; list-style: none; }
+  .legal-section ul li { font-size: 15px; color: rgba(240,249,255,0.6); line-height: 1.8; margin-bottom: 10px; padding-left: 24px; position: relative; }
+  .legal-section ul li::before { content: '→'; position: absolute; left: 0; color: #38bdf8; font-weight: 700; }
+
+  /* HIGHLIGHT BOX */
+  .legal-highlight {
+    background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(14,165,233,0.05));
+    border: 1px solid rgba(52,211,153,0.2); border-radius: 14px;
+    padding: 24px 28px; margin: 24px 0;
+  }
+  .legal-highlight p { margin: 0; color: rgba(240,249,255,0.7); }
+  .legal-highlight strong { color: #34d399; }
+
+  /* CONTACT BOX */
+  .legal-contact {
+    text-align: center; padding: 56px 40px; border-radius: 24px;
+    background: linear-gradient(135deg, rgba(14,165,233,0.07), rgba(129,140,248,0.05));
+    border: 1px solid rgba(14,165,233,0.15); margin-top: 64px;
+  }
+  .legal-contact h3 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; color: #f0f9ff; }
+  .legal-contact p { font-size: 15px; color: rgba(240,249,255,0.55); margin-bottom: 28px; }
+  .btn-legal { display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; border-radius: 50px; background: linear-gradient(135deg, #0ea5e9, #818cf8); color: white; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 8px 28px rgba(14,165,233,0.3); transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+  .btn-legal:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 16px 48px rgba(14,165,233,0.45); color: white; }
+
+  /* DIVIDER */
+  .legal-divider { width: 60px; height: 3px; background: linear-gradient(90deg, #0ea5e9, #818cf8); border-radius: 3px; margin: 0 0 20px; }
+
+  @media (max-width: 640px) {
+    .legal-content { padding: 60px 20px 80px; }
+    .legal-toc { padding: 24px; }
+  }
+</style>
+
+<div class="legal-page">
+  <div class="legal-bg">
+    <img class="legal-bg-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="">
+    <div class="legal-bg-overlay"></div>
+  </div>
+  <div class="legal-orb legal-orb-1"></div>
+  <div class="legal-orb legal-orb-2"></div>
+
+  <div class="legal-content">
+
+    <!-- Hero -->
+    <div class="legal-hero" data-aos="fade-up">
+      <div class="legal-eyebrow">Legal</div>
+      <h1 class="legal-title">Privacy Policy</h1>
+      <p class="legal-meta">Last updated: January 1, 2025 &nbsp;·&nbsp; Effective: January 1, 2025</p>
+    </div>
+
+    <!-- TOC -->
+    <div class="legal-toc" data-aos="fade-up" data-aos-delay="100">
+      <h4>Contents</h4>
+      <ol>
+        <li><a href="#info-collect">Information We Collect</a></li>
+        <li><a href="#how-use">How We Use Your Information</a></li>
+        <li><a href="#sharing">Information Sharing & Disclosure</a></li>
+        <li><a href="#mental-health">Mental Health Data — Special Protections</a></li>
+        <li><a href="#security">Data Security</a></li>
+        <li><a href="#your-rights">Your Rights & Choices</a></li>
+        <li><a href="#retention">Data Retention</a></li>
+        <li><a href="#children">Children's Privacy</a></li>
+        <li><a href="#changes">Changes to This Policy</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ol>
+    </div>
+
+    <!-- Sections -->
+    <div class="legal-section" id="info-collect" data-aos="fade-up">
+      <div class="section-num">01</div>
+      <div class="legal-divider"></div>
+      <h2>Information We Collect</h2>
+      <p>MindFlow collects information you provide directly, information generated through your use of our services, and certain technical data to improve your experience and ensure safe, effective mental health support.</p>
+      <ul>
+        <li><strong>Account information:</strong> Name, email address, date of birth, and password when you register.</li>
+        <li><strong>Conversation data:</strong> Messages and interactions you have with our AI companion.</li>
+        <li><strong>Mood & wellness logs:</strong> Check-ins, journal entries, and self-assessments you voluntarily submit.</li>
+        <li><strong>Usage data:</strong> Session duration, features used, and navigation patterns.</li>
+        <li><strong>Device information:</strong> Browser type, operating system, and anonymized IP address.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section" id="how-use" data-aos="fade-up">
+      <div class="section-num">02</div>
+      <div class="legal-divider"></div>
+      <h2>How We Use Your Information</h2>
+      <p>We use the information we collect to provide, personalize, and continuously improve our mental health support services.</p>
+      <ul>
+        <li>Deliver personalized AI conversations tailored to your emotional state and history.</li>
+        <li>Monitor for crisis signals and connect you with emergency resources when needed.</li>
+        <li>Improve our AI models using anonymized, aggregated data — never individual conversations without explicit consent.</li>
+        <li>Send transactional emails (password resets, session summaries) and, with your opt-in, wellness reminders.</li>
+        <li>Maintain platform security, detect fraud, and comply with legal obligations.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section" id="sharing" data-aos="fade-up">
+      <div class="section-num">03</div>
+      <div class="legal-divider"></div>
+      <h2>Information Sharing & Disclosure</h2>
+      <p>We do not sell, rent, or trade your personal information. We share data only in limited, clearly defined circumstances:</p>
+      <ul>
+        <li><strong>Trusted service providers</strong> who process data on our behalf under strict confidentiality agreements.</li>
+        <li><strong>Healthcare partners</strong> only with your explicit written consent, when you request a therapist handoff.</li>
+        <li><strong>Legal requirements:</strong> When required by law, court order, or to protect safety in emergency situations.</li>
+        <li><strong>Business transfers:</strong> In the event of a merger or acquisition, with advance notice and continued protection of your rights.</li>
+      </ul>
+      <div class="legal-highlight">
+        <p><strong>🔒 Our Promise:</strong> Your therapy conversations, mood data, and mental health disclosures are <strong>never shared with advertisers, employers, or insurance companies.</strong></p>
+      </div>
+    </div>
+
+    <div class="legal-section" id="mental-health" data-aos="fade-up">
+      <div class="section-num">04</div>
+      <div class="legal-divider"></div>
+      <h2>Mental Health Data — Special Protections</h2>
+      <p>We recognize that mental health information is among the most sensitive personal data that exists. We apply heightened protections beyond standard privacy law requirements:</p>
+      <ul>
+        <li>All conversation content is encrypted end-to-end using AES-256 encryption.</li>
+        <li>Mental health data is stored separately from general account data in isolated, access-controlled systems.</li>
+        <li>Only you can access the full content of your conversations. Our team can only view anonymized, aggregated patterns.</li>
+        <li>You may delete your mental health data at any time, permanently and irrevocably.</li>
+        <li>We comply with HIPAA, GDPR Article 9 (special categories), and applicable regional mental health privacy laws.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section" id="security" data-aos="fade-up">
+      <div class="section-num">05</div>
+      <div class="legal-divider"></div>
+      <h2>Data Security</h2>
+      <p>Protecting your data is foundational to our mission. We implement industry-leading security measures including:</p>
+      <ul>
+        <li>AES-256 encryption at rest and TLS 1.3 in transit.</li>
+        <li>Regular third-party penetration testing and security audits.</li>
+        <li>Zero-trust access controls — employees access only the minimum data required.</li>
+        <li>24/7 anomaly detection and incident response systems.</li>
+        <li>SOC 2 Type II certified infrastructure.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section" id="your-rights" data-aos="fade-up">
+      <div class="section-num">06</div>
+      <div class="legal-divider"></div>
+      <h2>Your Rights & Choices</h2>
+      <p>Depending on your location, you have the following rights regarding your personal data:</p>
+      <ul>
+        <li><strong>Access:</strong> Request a copy of all data we hold about you.</li>
+        <li><strong>Correction:</strong> Update or correct inaccurate information.</li>
+        <li><strong>Deletion:</strong> Request permanent deletion of your account and all associated data.</li>
+        <li><strong>Portability:</strong> Export your data in a machine-readable format.</li>
+        <li><strong>Opt-out:</strong> Unsubscribe from marketing communications at any time.</li>
+        <li><strong>Restriction:</strong> Limit how we process your data in certain circumstances.</li>
+      </ul>
+    </div>
+
+    <div class="legal-section" id="retention" data-aos="fade-up">
+      <div class="section-num">07</div>
+      <div class="legal-divider"></div>
+      <h2>Data Retention</h2>
+      <p>We retain your personal data only as long as necessary to provide our services and comply with legal obligations. Conversation data is retained for 24 months by default and can be deleted at any time from your account settings. Upon account deletion, all personal data is purged within 30 days.</p>
+    </div>
+
+    <div class="legal-section" id="children" data-aos="fade-up">
+      <div class="section-num">08</div>
+      <div class="legal-divider"></div>
+      <h2>Children's Privacy</h2>
+      <p>MindFlow is designed for users aged 16 and older. We do not knowingly collect data from individuals under 16. If we discover we have collected data from a minor, we will delete it immediately. Parents or guardians may contact us at privacy@mindflow.ai to report a concern.</p>
+    </div>
+
+    <div class="legal-section" id="changes" data-aos="fade-up">
+      <div class="section-num">09</div>
+      <div class="legal-divider"></div>
+      <h2>Changes to This Policy</h2>
+      <p>We may update this Privacy Policy to reflect changes in our practices or applicable laws. We will notify you of material changes via email and an in-app notice at least 30 days before they take effect. Continued use of MindFlow after that date constitutes acceptance of the updated policy.</p>
+    </div>
+
+    <div class="legal-section" id="contact" data-aos="fade-up">
+      <div class="section-num">10</div>
+      <div class="legal-divider"></div>
+      <h2>Contact Us</h2>
+      <p>For privacy questions, data requests, or concerns, please reach out to our Data Protection Officer.</p>
+    </div>
+
+    <!-- Contact CTA -->
+    <div class="legal-contact" data-aos="fade-up">
+      <h3>Questions About Your Privacy?</h3>
+      <p>Our dedicated privacy team typically responds within 48 hours.</p>
+      <a href="mailto:privacy@mindflow.ai" class="btn-legal">✉ privacy@mindflow.ai</a>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
