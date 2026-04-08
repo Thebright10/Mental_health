@@ -613,3 +613,41 @@ def meditation_guide(request):
 
 def therapy_tips(request):
     return render(request, 'therapy_tips.html')
+
+
+def chat_api(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid request"}, status=405)
+
+    try:
+        api_key = os.environ.get("OPENROUTER_API_KEY")
+        if not api_key:
+            return JsonResponse({"error": "OPENROUTER_API_KEY missing"}, status=500)
+
+        user_message = request.POST.get("message", "")
+
+        response = requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": "openai/gpt-4o-mini",
+                "messages": [
+                    {"role": "user", "content": user_message}
+                ],
+            },
+            timeout=30,
+        )
+
+        data = response.json()
+
+        if response.status_code != 200:
+            return JsonResponse({"error": data}, status=500)
+
+        reply = data["choices"][0]["message"]["content"]
+        return JsonResponse({"reply": reply})
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
