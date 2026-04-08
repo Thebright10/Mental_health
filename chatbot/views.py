@@ -568,9 +568,7 @@ def chat(request):
         })
 
     except Exception as e:
-        print("Chat error:", e)
-        return JsonResponse({"reply": "Something went wrong. Please try again."})
-
+        return JsonResponse({"reply": f"ERROR: {str(e)}"})
 
 # ================= END CHAT =================
 @csrf_exempt
@@ -613,7 +611,9 @@ def meditation_guide(request):
 
 def therapy_tips(request):
     return render(request, 'therapy_tips.html')
-
+import os
+import requests
+from django.http import JsonResponse
 
 def chat_api(request):
     if request.method != "POST":
@@ -624,9 +624,7 @@ def chat_api(request):
         if not api_key:
             return JsonResponse({"error": "OPENROUTER_API_KEY missing"}, status=500)
 
-        data = json.loads(request.body)
-        user_message = data.get("message")
-        emotion = data.get("emotion")
+        user_message = request.POST.get("message", "")
 
         response = requests.post(
             "https://openrouter.ai/api/v1/chat/completions",
