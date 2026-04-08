@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+
+# Database
+db.sqlite3
+
+# Env
+.env
+
+# Static build
+staticfiles/
+
+# ML / Large files
+*.pkl
+*.weights
+*.h5
+*.pt
+*.bin
+
+# Models & datasets
+chatbot/model/
+ai_model/saved_models/
+dataset/
+static/models/
